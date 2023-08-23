@@ -30,8 +30,9 @@ bool ckmax(U &a, V b) { return b > a ? a = b, true : false; }
 template<class U, class V>
 bool ckmin(U &a, V b) { return b < a ? a = b, true : false; }
 
-// namespace io {
+namespace io {
 #define tcT template<class T
+#define EACH(x, a) for(auto &x : a)
 tcT> void read(vt<T> &v);
 tcT> void read(T &x) { cin >> x; }
 int read() { int x; read(x); return x; }
@@ -40,7 +41,7 @@ void read(long double &x) { string t; read(t); x=stold(t); }
 tcT, class U> void read(pair<T, U> &x) { T a; U b; read(a); read(b); x=make_pair(a, b); }
 tcT, size_t S> void read(ar<T, S> &a) { F(i, 0, S) read(a[i]); }
 tcT, class... A> void read(T &t, A&... a) { read(t); read(a...); }
-tcT> void read(vt<T> &x) { for(auto &a : x) read(a); }
+tcT> void read(vt<T> &x) { EACH(a, x) read(a); }
  
 string to_string(char c) { return string(1, c); }
 string to_string(bool b) { return b?"true":"false"; }
@@ -48,7 +49,7 @@ string to_string(const char* s) { return string(s); }
 string to_string(string s) { return s; }
 tcT> string to_string(T v) {
     bool f=1; string res="";
-    for(auto &x : v) { if(!f) res+=' '; f=0; res+=to_string(x); }
+    EACH(x, v) { if(!f) res+=' '; f=0; res+=to_string(x); }
     res+="";
     return res;
 }
@@ -64,8 +65,8 @@ void DBG() { cerr << "]" << endl; }
 template<class H, class... T> void DBG(H h, T... t) {
     cerr << to_string(h); if(sizeof... (t)) cerr << ", "; DBG(t...);
 }
-// };
-// using io::read; using io::print; using io::write; using io::DBG;
+};
+using io::read; using io::print; using io::write; using io::DBG;
 #ifdef LOCAL
 #define dbg(...) cerr << "LINE(" << __LINE__ << ") -> [" << #__VA_ARGS__ << "]: [", DBG(__VA_ARGS__)
 #else 
@@ -76,4 +77,5 @@ const char nl = '\n';
 const int nax=200*1007;
 int main() {
     ios_base::sync_with_stdio(false); cin.tie(nullptr);
+
 }
