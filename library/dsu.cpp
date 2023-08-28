@@ -5,7 +5,7 @@ struct DSU {
     vector<int> par;
     int n = 0, comp = 0;
 
-    DSU(int n_) { init(n); }
+    DSU(int n_) { init(n_); }
 
     void init(int m) {
         n = m, comp = m;
