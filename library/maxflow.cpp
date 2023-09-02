@@ -28,7 +28,7 @@ template<class T> struct Flow {
             auto u = q.front(); q.pop();
             for (int i = 0; i < (int)g[u].size(); i++) {
                 const int j = g[u][i];
-                auto &&[v, c] = edges[j];
+                auto [v, c] = edges[j];
                 if (c > 0 && lev[v] == -1) {
                     lev[v] = lev[u] + 1;
                     if (v == t) return true;
@@ -43,7 +43,7 @@ template<class T> struct Flow {
         T flow = 0;
         for (int &i = cur[u]; i < (int)g[u].size(); i++) {
             int j = g[u][i];
-            auto &&[v, c] = edges[j];
+            auto [v, c] = edges[j];
             if (c > 0 && lev[v] == lev[u] + 1) {
                 auto a = dfs(v, t, std::min(c, f));
                 edges[j].cap -= a;
