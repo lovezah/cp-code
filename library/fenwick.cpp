@@ -17,7 +17,6 @@ template<class T> struct fenwick {
         }
     }
     T prefix(int x) { // return range[0, x)
-        c = min(c, n);
         T ret = T();
         for (int i = x; i > 0; i -= i & -i) 
             ret +=  c[i];

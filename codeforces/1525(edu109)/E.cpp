@@ -71,8 +71,44 @@ template<class H, class... T> void DBG(H h, T... t) {
 #endif
 
 const char nl = '\n';
-const int nax=200*1007;
+const int nax=50100;
+
+const ll mod = 998244353;
+ll pow(ll a, ll k) {
+    ll r=1;
+    for (; k; k>>=1, a=a*a%mod) {
+        if (k&1) r=r*a%mod;
+    }
+    return r;
+}
+ll inv(ll a) {
+    return pow(a, mod-2);
+}
+int n, m;
+int c[nax][22];
 int main() {
     ios_base::sync_with_stdio(false); cin.tie(nullptr);
-
+    read(n, m);
+    F(i, 0, n) F(j, 0, m) {
+        c[j][read()-1]++;
+    }
+    ll ans = 0;
+    ll ba = 1;
+    F(i, 1, n+1)
+        ba = ba * i % mod;
+    ba=inv(ba);
+    F(i, 0, m) {
+        ll s = 0, v = 1;
+        FF(j, 1, n+1) {
+            s += c[i][j];
+            s %= mod;
+            v = v * s % mod;
+            s--;
+        }
+        v = v * ba % mod;
+        v = (1 - v) + mod;
+        v %= mod;
+        ans = (ans + v) % mod;
+    }
+    print(ans);
 }
