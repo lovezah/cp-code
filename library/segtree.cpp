@@ -3,96 +3,81 @@ using namespace std;
 
 template<class S, S (*op)(S, S), S (*e)()>
 struct segtree {
-    int n, size, log;
+    int n;
     vector<S> v;
-    segtree(int n_) : segtree(vector<S>(n_, e())) {}
-    segtree(const vector<S> &v_) : n((int)v_.size()) {
-        size = 1;
-        while (size < n) size *= 2;
-        log = __builtin_ctz(size);
-        v = vector<S>(size * 2, e());
-        for (int i = 0; i < n; i++)
-            v[i+size] = v_[i];
-        for (int i = size - 1; i > 0; i--) {
-            update(i);
-        }
+    segtree() : n(0) {}
+    segtree(int n_, S val = e()) {
+        init(n_, val);
     }
-    void update(int p) { v[p] = op(v[p*2], v[p*2+1]); }
-    void set(int p, S x) {
-        assert(0 <= p && p < n);
-        p += size;
-        v[p] = x;
-        for (int i = p / 2; i > 0; i /= 2)
-            update(i);
+    template<class T>
+    segtree(vector<T> info) {
+        init(info);
     }
-    S get(int p) const {
-        assert(0 <= p && p < n);
-        return v[p+size];
+    void init(int n_, S val = e()) {
+        init(vector<S>(n_, val));
     }
-    S prod(int l, int r) const { // [l, r)
-        assert(0 <= l && l <= r && r <= n);
-        S vl = e(), vr = e();
-        for (l += size, r += size; l < r; l /= 2, r /= 2) {
-            if (l & 1) vl = op(vl, v[l++]);
-            if (r & 1) vr = op(v[--r], vr);
-        }
-        return op(vl, vr);
-    }
-    S all_prod() const { return v[1]; }
-    template<bool (*f)(S)> int max_right(int l) const {
-        return max_right(l, [](S x) { return f(x); });
-    }
-    template<class F> int max_right(int l, F f) const {
-        assert(0 <= l && l <= n);
-        assert(f(e()));
-        if (l == n) return n;
-        l += size;
-        S val = e();
-        do {
-            while (l % 2 == 0) l /= 2;
-            if (!f(op(val, v[l]))) {
-                while (l < size) {
-                    l = l * 2;
-                    if (f(op(val, v[l]))) {
-                        val = op(val, v[l]);
-                        l++;
-                    }
-                }
-                return l - size;
+    template<class T>
+    void init(vector<T> info) {
+        n = info.size();
+        v.assign(4 << __lg(n), e());
+        function<void(int, int, int)> build = [&](int p, int l, int r) {
+            if (l == r) {
+                v[p] = info[l]; return;
             }
-            val = op(val, v[l]);
-            l++;
-        } while ((l & -l) != l);
-        return n;
+            int m = (l + r) / 2;
+            build(p * 2, l, m);
+            build(p * 2 + 1, m + 1, r);
+            pull(p);
+        };
+        build(1, 0, n - 1);
     }
-    template<bool (*f)(S)> int min_left(int r) const {
-        return min_left(r, [](S x) { return f(x); });
+    void pull(int p) {
+        v[p] = op(v[p*2], v[p*2+1]);
     }
-    template<class F> int min_left(int r, F f) const {
-        assert(0 <= r && r <= n);
-        assert(f(e()));
-        if (r == 0) return 0;
-        r += size;
-        S val = e();
-        do {
-            r--;
-            while (r > 1 && (r % 2)) r /= 2;
-            if (!f(op(v[r], val))) {
-                while (r < size) {
-                    r = r * 2 + 1;
-                    if (f(op(v[r], val))) {
-                        val = op(v[r], val);
-                        r--;
-                    }
-                }
-                return r + 1 - size;
-            }
-            val = op(v[r], val);
-        } while ((r & -r) != r);
-        return 0;
+    void modify(int x, const S &cv, int p, int l, int r) {
+        if (l == r) {
+            v[p] = cv; return;
+        }
+        int m = (l + r) / 2;
+        if (x <= m) modify(x, cv, p * 2, l, m);
+        else modify(x, cv, p * 2 + 1, m + 1, r);
+        pull(p);
+    }
+    void modify(int x, const S &cv) {
+        modify(x, cv, 1, 0, n - 1);
+    }
+    S query(int ql, int qr, int p, int l, int r) {
+        if (ql == l && r == qr) {
+            return v[p];
+        }
+        int m = (l + r) / 2;
+        if (qr <= m) return query(ql, qr, p * 2, l, m);
+        else if (ql > m) return query(ql, qr, p * 2 + 1, m + 1, r);
+        else return op(query(ql, m, p * 2, l, m), query(m + 1, qr, p * 2 + 1, m + 1, r));
+    }
+    S query(int ql, int qr) {
+        return query(ql, qr, 1, 0, n - 1);
+    }
+    template<class F>
+    int find_first(int ql, int qr, F f, int p, int l, int r) {
+        if (ql > r || qr < l || !f(v[p])) {
+            return -1;
+        }
+        if (l == r) {
+            return l;
+        }
+        int m = (l + r) / 2;
+        int ret = find_first(ql, qr, f, p * 2, l, m);
+        if (ret == -1) {
+            ret = find_first(ql, qr, f, p * 2 + 1, m + 1, r);
+        }
+        return ret;
+    }
+    template<class F>
+    int find_first(int ql, int qr, F f) {
+        return find_first(ql, qr, f, 1, 0, n - 1);
     }
 };
-// max_right : the maximum r that satisfies f(op(a[l], a[l+1], ..., a[r-1])) = true.
-// min_left : the minimum l that satisfies f(op(a[l], a[l+1], ..., a[r-1])) = true.
-int op(int a, int b) { return max(a, b); }
-int e() { return 0; }
+using ll = int64_t;
+ll op(ll a, ll b) { return max(a, b); }
+ll e() { return 0LL; }

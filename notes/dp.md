@@ -1,0 +1,3 @@
+## [Educational Codeforces Round 59 E. Vasya and Binary String](https://codeforces.com/contest/1107/problem/E)
+* 长度为n的01字符串，每次可以选一段连续的相同字符的子串删除，剩下的glue起来。可获得a[len]得分。如何最大化得分。(n<=100)
+* 根据n大小可想到区间dp，如何转移，因为这个有长度的概念，我们可以定义dp[l][r][suf]，表示区间l到r，并且结尾还有suf-1个和s[r]相同的字符串联的字符串的最大得分。明显如果l==r，ans=a[suf]。否则可有两种情况，第一种ans=dp[l][r-1][1]+a[suf]，也就是将最后那一串相同的cash in。第二种情况是我们先把中间的扣去，剩下glue起来的我们在统计答案.因此可以循环区间，若s[i]==s[r]，ans=dp[l][i][1+suf]+dp[i+1][r-1][1]。记忆化搜索即可

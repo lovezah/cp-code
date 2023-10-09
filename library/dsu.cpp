@@ -11,7 +11,7 @@ struct DSU {
         n = m, comp = m;
         par.assign(n, -1);
     }
-    int operator[](int x) {
+    int find(int x) {
         while (par[x] >= 0) {
             if (par[par[x]] >= 0)
                 par[x] = par[par[x]];
@@ -19,18 +19,20 @@ struct DSU {
         }
         return x;
     }
+    int operator[] (int x) {
+        return find(x);
+    }
     bool join(int x, int y) {
-        x = (*this)[x], y = (*this)[y];
+        x = find(x), y = find(y);
         if (x == y) return false;
         if (-par[x] < -par[y]) swap(x, y);
         par[x] += par[y]; par[y] = x; comp--;
         return true;
     }
     bool same(int x, int y) {
-        return (*this)[x] == (*this)[y];
+        return find(x) == find(y);
     }
     int size(int x) {
-        x = (*this)[x];
-        return -par[x];
+        return -par[find(x)];
     }
 };

@@ -1,0 +1,3 @@
+## [Educational Codeforces Round 59 F. Vasya and Endless Credits](https://codeforces.com/contest/1107/problem/F)
+* vasya想买车。最开始有0元。银行有n种credit offers，每个offer有三个数值a[i],b[i],k[i]。如果vasya选了第i个offer，会在月初给你a[i]元，并在后面k[i]个月底交b[i]元。你是无赖，可以在月中拿钱买车。一个月最多选一个offer，一个offer最多被选一次.能买的最贵的车是什么.(n<=500)
+* 如果我在买车前第i个月选了第j个offer,那第j个offer给我的收益是get = a[j]-min(k[j], i)*b[j].那问题就转化成了分配问题.可以使用费用流,费用流建图如下:源点到每个左部点连一条(1,0)的边,其中(a,b)表示流量为a,费用为b.每个右部点到汇点连一条(1,0)的边.每个左部点向每个右部点连一条(1,get_i_j),然后费用一下即可.

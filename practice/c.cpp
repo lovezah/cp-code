@@ -43,16 +43,15 @@ mt19937 mrand(random_device{}());
 int rng(int x) { return mrand() % x; }
 
 const char nl = '\n';
-const int nax = 500*1007;
+const int nax = 1007;
 
 void solve(int tc = 1) {
-
 }
 
 int main() {
     ios::sync_with_stdio(0); cin.tie(0);
     int tt = 1;
-    cin >> tt;
+    //cin >> tt;
     for (int i = 1; i <= tt; i++)
         solve(i);
 }

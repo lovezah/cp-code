@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-
 const int nax = 1000*1007;
 int sa[nax], rk[nax], ht[nax];
 // 0-based sa 表示第i大的为哪个，rk 表示第i个后缀第几大
@@ -42,29 +41,4 @@ void buildSA(std::string &s, int m = 128) {
 		while (s[i + k] == s[j + k]) k++;
 		ht[rk[i]] = k;
 	}
-}
-
-using ll = int64_t;
-int main() {
-    ios_base::sync_with_stdio(false); cin.tie(nullptr);
-    std::string S; cin >> S;
-    int N = S.size();
-    buildSA(S);
-    ll ans = (ll)(N - 1) * (N + 1) * N / 2;
-    // 1...(n-1)
-    std::vector<int> L(N, 0), R(N, N);
-    std::vector<int> q; q.push_back(0);
-    for (int i = 1; i < N; i++) {
-        while (q.size() && ht[i] < ht[q.back()]) {
-            R[q.back()] = i;
-            q.pop_back();
-        }
-        L[i] = q.back();
-        q.push_back(i);
-    }
-    for (int i = 1; i < N; i++) {
-        ans -= 2LL * ht[i] * (i - L[i]) * (R[i] - i);
-    }
-    cout << ans << '\n';
-    return 0;
 }

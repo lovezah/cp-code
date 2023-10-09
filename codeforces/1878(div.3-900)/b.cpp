@@ -12,8 +12,6 @@ typedef pair<ll, ll> pl;
 
 template<class T>
 using vt = vector<T>;
-template<class T, size_t S>
-using ar = array<T, S>;
 typedef vt<int> vi;
 typedef vt<ll> vl;
 typedef vt<pi> vpi;
@@ -21,7 +19,6 @@ typedef vt<pl> vpl;
 
 #define sz(a) (int)(a).size()
 #define pb push_back
-#define mp make_pair
 #define f first
 #define s second
 #define all(a) (a).begin(), (a).end()
@@ -36,17 +33,19 @@ typedef vt<pl> vpl;
 
 template<class T> using pq = priority_queue<T>;
 template<class T> using pqg = priority_queue<T, vt<T>, greater<T>>;
-template<class T, class U> bool ckmin(T &a, U b) { return b < a ? a = b, 1 : 0; }
-template<class T, class U> bool ckmax(T &a, U b) { return b > a ? a = b, 1 : 0; }
-
-mt19937 mrand(random_device{}());
-int rng(int x) { return mrand() % x; }
+template<class T, class U> bool ckmin(T &a, T b) { return b < a ? a = b, 1 : 0; }
+template<class T, class U> bool ckmax(T &a, T b) { return b > a ? a = b, 1 : 0; }
 
 const char nl = '\n';
 const int nax = 500*1007;
 
-void solve(int tc = 1) {
-
+void solve(int tc) {
+    int n; cin >> n;
+    int a = 1;
+    F(i, 0, n) {
+        cout << a << " \n"[i+1==n];
+        a += 2;
+    }
 }
 
 int main() {

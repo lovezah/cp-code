@@ -12,8 +12,6 @@ typedef pair<ll, ll> pl;
 
 template<class T>
 using vt = vector<T>;
-template<class T, size_t S>
-using ar = array<T, S>;
 typedef vt<int> vi;
 typedef vt<ll> vl;
 typedef vt<pi> vpi;
@@ -21,7 +19,6 @@ typedef vt<pl> vpl;
 
 #define sz(a) (int)(a).size()
 #define pb push_back
-#define mp make_pair
 #define f first
 #define s second
 #define all(a) (a).begin(), (a).end()
@@ -36,17 +33,61 @@ typedef vt<pl> vpl;
 
 template<class T> using pq = priority_queue<T>;
 template<class T> using pqg = priority_queue<T, vt<T>, greater<T>>;
-template<class T, class U> bool ckmin(T &a, U b) { return b < a ? a = b, 1 : 0; }
-template<class T, class U> bool ckmax(T &a, U b) { return b > a ? a = b, 1 : 0; }
-
-mt19937 mrand(random_device{}());
-int rng(int x) { return mrand() % x; }
+template<class T, class U> bool ckmin(T &a, T b) { return b < a ? a = b, 1 : 0; }
+template<class T, class U> bool ckmax(T &a, T b) { return b > a ? a = b, 1 : 0; }
 
 const char nl = '\n';
 const int nax = 500*1007;
 
-void solve(int tc = 1) {
+ll n, q;
+ll tot = 1;
+map<int, ll> freq;
+void gao(int x) {
+    for (int i = 2; i <= x / i; i++) {
+        if (x % i == 0) {
+            int c = 0;
+            while (x % i == 0) {
+                c += 1;
+                x /= i;
+            }
+            tot /= (freq[i] + 1);
+            freq[i] += c;
+            tot *= (freq[i] + 1);
+        }
+    }
+    if (x > 1) {
+        tot /= (freq[x] + 1);
+        freq[x]++;
+        tot *= (freq[x] + 1);
+    }
+}
 
+vi seq;
+void init() {
+    seq = vi(1, n);
+    freq.clear();
+    tot = 1;
+    gao(n);
+}
+void solve(int tc) {
+    cin >> n >> q;
+    init();
+    F(i, 0, q) {
+        int k; cin >> k;
+        if (k == 1) {
+            ll x; cin >> x;
+            seq.pb(x);
+            gao(x);
+            ll now = 1;
+            for (auto v : seq) {
+                now = now * v % tot;
+            }
+            cout << (now == 0 ? "YES" : "NO") << nl;
+        } else {
+            init();
+        }
+    }
+    cout << nl;
 }
 
 int main() {

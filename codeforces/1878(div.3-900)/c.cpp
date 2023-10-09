@@ -12,8 +12,6 @@ typedef pair<ll, ll> pl;
 
 template<class T>
 using vt = vector<T>;
-template<class T, size_t S>
-using ar = array<T, S>;
 typedef vt<int> vi;
 typedef vt<ll> vl;
 typedef vt<pi> vpi;
@@ -21,7 +19,6 @@ typedef vt<pl> vpl;
 
 #define sz(a) (int)(a).size()
 #define pb push_back
-#define mp make_pair
 #define f first
 #define s second
 #define all(a) (a).begin(), (a).end()
@@ -39,14 +36,21 @@ template<class T> using pqg = priority_queue<T, vt<T>, greater<T>>;
 template<class T, class U> bool ckmin(T &a, U b) { return b < a ? a = b, 1 : 0; }
 template<class T, class U> bool ckmax(T &a, U b) { return b > a ? a = b, 1 : 0; }
 
-mt19937 mrand(random_device{}());
-int rng(int x) { return mrand() % x; }
-
 const char nl = '\n';
 const int nax = 500*1007;
 
-void solve(int tc = 1) {
+#define GG cout << "YES" << '\n'; return
 
+ll n, k, x;
+void solve(int tc) {
+    cin >> n >> k >> x;
+    if (n < k) {
+        cout << "NO" << '\n'; return;
+    }
+    ll mn = (k + 1) * k / 2;
+    ll mx = (n + (n - k + 1)) * k / 2;
+    if (mn <= x && x <= mx) cout << "YES" << '\n';
+    else cout << "NO" << '\n';
 }
 
 int main() {
