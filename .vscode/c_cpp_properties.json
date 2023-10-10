@@ -12,10 +12,10 @@
             ],
             "compilerPath": "D:/winlibs-x86_64-mcf-seh-gcc-13.1.0-mingw-w64msvcrt-11.0.0-r5/mingw64/bin/g++.exe",
             "cStandard": "c17",
-            "cppStandard": "gnu++17",
+            "cppStandard": "gnu++20",
             "intelliSenseMode": "windows-gcc-x64",
             "compilerArgs": [
-                "-std=c++17",
+                "-std=c++20",
                 "-O2",
                 "-Wl,--stack,268435456",
                 "-DLOCAL"
